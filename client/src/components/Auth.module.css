@@ -1,0 +1,106 @@
+.form_area {
+  margin-top: 5vh;
+  margin-left: 5vw;
+}
+
+.form_area input {
+  position: relative;
+  height: 5vh;
+  width: 90vw;
+  border: none;
+  outline: none;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.form_area textarea {
+  position: relative;
+  height: 10vh;
+  width: 90vw;
+  border: none;
+  outline: none;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.form_area input:-webkit-autofill {
+  box-shadow: 0 0 0 1000px;
+}
+
+.form_area textarea:-webkit-autofill {
+  box-shadow: 0 0 0 1000px;
+}
+
+.form_wrapper {
+  position: relative;
+  width: 90vw;
+}
+
+.form_wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  background: linear-gradient(
+      to right,
+      #3ab0b2 0%,
+      #3a90b7 25%,
+      #3a6cbd 50%,
+      #3a45c2 75%,
+      #593bc6 100%
+    )
+    border-box border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0) border-box;
+  -webkit-mask-composite: destination-out;
+  mask: linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0) border-box;
+  mask-composite: exclude;
+}
+
+.form_wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0.5px;
+  left: 0.5px;
+  right: 0.5px;
+  bottom: 0.5px;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.btn_area {
+  width: 90vw;
+  margin-top: 5vh;
+  margin-left: 5vw;
+}
+
+.btn_area Button {
+  position: relative;
+  height: 5vh;
+  width: 100%;
+  margin-top: 3vw;
+  border-radius: 10px;
+  color: white;
+  background: linear-gradient(
+    to right,
+    #3ab0b2 0%,
+    #3a90b7 25%,
+    #3a6cbd 50%,
+    #3a45c2 75%,
+    #593bc6 100%
+  );
+}
+
+.underline {
+  margin-left: 5vw;
+  font-size: 2vh;
+}
+
+.underline {
+  text-decoration: underline;
+}

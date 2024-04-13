@@ -1,0 +1,97 @@
+.comments_parent {
+  position: relative;
+  overflow-x: visible;
+  margin-right: 15px;
+}
+
+.comments_child {
+  position: absolute;
+  top: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  max-width: 100vw;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.comments_child::-webkit-scrollbar {
+  display: none;
+}
+
+.icon {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.icon_name {
+  display: flex;
+  align-items: center;
+}
+
+.text {
+  margin-left: 5px;
+}
+
+.comment_square {
+  position: relative;
+  color: white;
+}
+
+.comment_square Button {
+  color: white;
+}
+
+.comment_square::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  border-radius: 10px;
+  opacity: 25%;
+  background: linear-gradient(
+    to right,
+    #3ab0b2 0%,
+    #3a90b7 25%,
+    #3a6cbd 50%,
+    #3a45c2 75%,
+    #593bc6 100%
+  );
+}
+
+.comment_square::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: linear-gradient(
+      to right,
+      #3ab0b2 0%,
+      #3a90b7 25%,
+      #3a6cbd 50%,
+      #3a45c2 75%,
+      #593bc6 100%
+    )
+    border-box border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0) border-box;
+  -webkit-mask-composite: destination-out;
+  mask: linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0) border-box;
+  mask-composite: exclude;
+}
+
+.comment_form {
+  display: flex;
+}
+
+.comment_form Button {
+  color: white;
+}
