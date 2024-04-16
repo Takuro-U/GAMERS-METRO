@@ -3,19 +3,13 @@ import Auth from "../models/model_auth";
 import User from "../models/model_user";
 import Otp from "../models/model_otp";
 import { v4 as uuidv4 } from "uuid";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
-import mailgun from "mailgun-js";
 import { Op } from "sequelize";
 
 const authRouter = express.Router();
 
 const crypto = require("crypto");
-
-const mg = mailgun({
-  apiKey: "7e91a97611684fa91885b6f3f6763375-8c8e5529-5175ccc0",
-  domain: "sandbox464e91902d9a472e84be5f90dfd8644f.mailgun.org",
-});
 
 const transporter = nodemailer.createTransport({
   host: "mail1005.onamae.ne.jp",
@@ -190,42 +184,6 @@ authRouter.post("/email", async (req: Request, res: Response) => {
       }
     });
   } catch (error) {}
-});
-
-//メール送信テスト
-authRouter.post("/email-test", async (req: Request, res: Response) => {
-  try {
-    const address = req.body.address;
-    const oneTimePass = crypto.randomInt(100000, 1000000);
-    const mailData: mailgun.messages.SendData = {
-      from: "422314@m.mie-u.ac.jp",
-      to: address,
-      subject: "GAMERS' METRO ワンタイムパスワード",
-      text: oneTimePass,
-    };
-    mg.messages().send(mailData, async (error, body) => {
-      if (error) {
-        console.error(error);
-        res.status(500).json({ error: "Failed to send email" });
-      } else {
-        console.log(body);
-        const id = uuidv4();
-
-        await Otp.create({
-          Id: id,
-          Email: address,
-          ProfileId: "",
-          OneTimePass: oneTimePass,
-        });
-        res.json(null);
-      }
-    });
-
-    console.log("executed!!");
-    console.log(address);
-  } catch (error) {
-    console.log(error);
-  }
 });
 
 authRouter.get("/otpcheck", async (req: Request, res: Response) => {
