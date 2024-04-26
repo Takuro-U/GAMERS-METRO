@@ -80,12 +80,12 @@ const Board: React.FC<PROPS> = (props) => {
   };
 
   //投稿検索機能
-  const searchPosts = async () => {
+  const searchPosts = async (keyWords: string[]) => {
     const postResponse = await axios.get(
       "http://localhost:5000/post/board/search",
       {
         params: {
-          keyWords: props.keyWords,
+          keyWords: keyWords,
         },
       }
     );
@@ -138,7 +138,7 @@ const Board: React.FC<PROPS> = (props) => {
       getPosts();
     } else {
       console.log("executed");
-      searchPosts();
+      searchPosts(props.keyWords);
     }
   }, [props.keyWords]);
 

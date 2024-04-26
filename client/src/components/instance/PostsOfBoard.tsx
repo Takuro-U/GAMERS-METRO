@@ -26,9 +26,9 @@ interface PROPS {
 
 const PostsOfBoard: React.FC<PROPS> = (props) => {
   const [isEditMode, setIsEditMode] = useState(false);
-  const [currentGameTitle, setCurrentGameTitle] = useState("");
-  const [currentPostTitle, setCurrentPostTitle] = useState("");
-  const [currentText, setCurrentText] = useState("");
+  const [newGameTitle, setNewGameTitle] = useState("");
+  const [newPostTitle, setNewPostTitle] = useState("");
+  const [newText, setNewText] = useState("");
 
   const user = useSelector(selectUser);
 
@@ -41,22 +41,17 @@ const PostsOfBoard: React.FC<PROPS> = (props) => {
   };
 
   //新投稿編集機能
-  const editPost = async (
-    checkId: string,
-    gameTitle: string,
-    postTitle: string,
-    postMsg: string
-  ) => {
+  const editPost = async () => {
     if (
-      currentGameTitle != gameTitle ||
-      currentPostTitle != postTitle ||
-      currentText != postMsg
+      newGameTitle != props.gametitle ||
+      newPostTitle != props.posttitle ||
+      newText != props.text
     ) {
       await axios.put("http://localhost:5000/post/board/edit", {
-        id: checkId,
-        gameTitle: currentGameTitle,
-        postTitle: currentPostTitle,
-        postMsg: currentText,
+        id: props.postId,
+        gameTitle: newGameTitle,
+        postTitle: newPostTitle,
+        postMsg: newText,
       });
     }
     setIsEditMode(false);
@@ -64,10 +59,10 @@ const PostsOfBoard: React.FC<PROPS> = (props) => {
   };
 
   //新投稿削除機能
-  const deletePost = async (checkId: string) => {
+  const deletePost = async () => {
     await axios.delete("http://localhost:5000/post/board/delete", {
       params: {
-        id: checkId,
+        id: props.postId,
       },
     });
     props.onReload();
@@ -105,30 +100,19 @@ const PostsOfBoard: React.FC<PROPS> = (props) => {
           <form onSubmit={handleSubmit}>
             <input
               type="text"
-              value={currentGameTitle}
-              onChange={(e) => setCurrentGameTitle(e.target.value)}
+              value={newGameTitle}
+              onChange={(e) => setNewGameTitle(e.target.value)}
             />
             <input
               type="text"
-              value={currentPostTitle}
-              onChange={(e) => setCurrentPostTitle(e.target.value)}
+              value={newPostTitle}
+              onChange={(e) => setNewPostTitle(e.target.value)}
             />
             <textarea
-              value={currentText}
-              onChange={(e) => setCurrentText(e.target.value)}
+              value={newText}
+              onChange={(e) => setNewText(e.target.value)}
             />
-            <Button
-              onClick={() =>
-                editPost(
-                  props.postId,
-                  props.gametitle,
-                  props.posttitle,
-                  props.text
-                )
-              }
-            >
-              SEND
-            </Button>
+            <Button onClick={editPost}>SEND</Button>
           </form>
         ) : (
           <>
@@ -149,15 +133,15 @@ const PostsOfBoard: React.FC<PROPS> = (props) => {
                   }
                 : () => {
                     setIsEditMode(true);
-                    setCurrentGameTitle(props.gametitle);
-                    setCurrentPostTitle(props.posttitle);
-                    setCurrentText(props.text);
+                    setNewGameTitle(props.gametitle);
+                    setNewPostTitle(props.posttitle);
+                    setNewText(props.text);
                   }
             }
           >
             <Edit />
           </Button>
-          <Button onClick={() => deletePost(props.postId)}>
+          <Button onClick={deletePost}>
             <Delete />
           </Button>
         </div>

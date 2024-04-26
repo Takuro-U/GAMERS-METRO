@@ -6,27 +6,25 @@ import { IconButton } from "@material-ui/core";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
-type ChildComponentProps = {
+type PROPS = {
   triggerSendPost: ((func: () => void) => void) | null;
   toggleInputMode: (value: boolean) => void;
 };
 
-const CommunityInput: React.FC<ChildComponentProps> = ({
-  triggerSendPost,
-  toggleInputMode,
-}) => {
+const CommunityInput: React.FC<PROPS> = (props) => {
   const [postMsg, setPostMsg] = useState("");
-  const [postImg1, setPostImg1] = useState<File | null>(null);
+  const [imgData1, setImgData1] = useState<File | null>(null);
   const [imgUrl1, setImgUrl1] = useState("");
-  const [postImg2, setPostImg2] = useState<File | null>(null);
+  const [imgData2, setImgData2] = useState<File | null>(null);
   const [imgUrl2, setImgUrl2] = useState("");
-  const [postImg3, setPostImg3] = useState<File | null>(null);
+  const [imgData3, setImgData3] = useState<File | null>(null);
   const [imgUrl3, setImgUrl3] = useState("");
-  const [postImg4, setPostImg4] = useState<File | null>(null);
+  const [imgData4, setImgData4] = useState<File | null>(null);
   const [imgUrl4, setImgUrl4] = useState("");
 
   const user = useSelector(selectUser);
 
+  //Base64エンコード
   const fileToBase64 = (file: File): Promise<string | ArrayBuffer | null> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -36,47 +34,58 @@ const CommunityInput: React.FC<ChildComponentProps> = ({
     });
   };
 
-  const addImageHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //画像アップロード
+  const addImageHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files![0]) {
-      if (postImg4) {
+      if (imgData4) {
         return;
-      } else if (postImg3) {
-        setPostImg4(e.target.files![0]);
+      } else if (imgData3) {
+        setImgData4(e.target.files![0]);
         setImgUrl4(URL.createObjectURL(e.target.files![0]));
         e.target.value = "";
-      } else if (postImg2) {
-        setPostImg3(e.target.files![0]);
+      } else if (imgData2) {
+        setImgData3(e.target.files![0]);
         setImgUrl3(URL.createObjectURL(e.target.files![0]));
-      } else if (postImg1) {
-        setPostImg2(e.target.files![0]);
+      } else if (imgData1) {
+        setImgData2(e.target.files![0]);
         setImgUrl2(URL.createObjectURL(e.target.files![0]));
       } else {
-        setPostImg1(e.target.files![0]);
+        setImgData1(e.target.files![0]);
         setImgUrl1(URL.createObjectURL(e.target.files![0]));
       }
       e.target.value = "";
+    } else {
+      console.log("none");
     }
   };
 
+  //ファイル名取得
   const getFileName = async (image: File | null) => {
     if (image) {
-      const timestamp = new Date();
-      const parts = image.name.split(".");
-      const extention = parts[parts.length - 1];
-      const fileName = uuidv4() + ".jpg";
+      const timestamp = new Date().toString;
+      const fileName = uuidv4() + "_" + timestamp + ".jpg";
       return fileName;
     }
     return null;
   };
 
   //新投稿機能
-  const sendPost = async () => {
-    if (postMsg != "" || postImg1) {
-      const imgName1 = await getFileName(postImg1);
-      const imgName2 = await getFileName(postImg2);
-      const imgName3 = await getFileName(postImg3);
-      const imgName4 = await getFileName(postImg4);
-      console.log(user.uid);
+  const sendPost = async ({
+    imgData1,
+    imgData2,
+    imgData3,
+    imgData4,
+  }: {
+    imgData1: File | null;
+    imgData2: File | null;
+    imgData3: File | null;
+    imgData4: File | null;
+  }) => {
+    if (postMsg != "" || imgData1) {
+      const imgName1 = await getFileName(imgData1);
+      const imgName2 = await getFileName(imgData2);
+      const imgName3 = await getFileName(imgData3);
+      const imgName4 = await getFileName(imgData4);
       await axios.post("http://localhost:5000/post/community/send", {
         uid: user.uid,
         text: postMsg,
@@ -85,8 +94,8 @@ const CommunityInput: React.FC<ChildComponentProps> = ({
         img3: imgName3,
         img4: imgName4,
       });
-      if (postImg1 && imgName1) {
-        const img = await fileToBase64(postImg1);
+      if (imgData1) {
+        const img = await fileToBase64(imgData1);
         const name = imgName1;
         const fileData = {
           name,
@@ -98,36 +107,56 @@ const CommunityInput: React.FC<ChildComponentProps> = ({
           },
         });
       }
-      if (postImg2) {
-        await axios.post("http://localhost:5000/file/send", {
-          img: postImg2,
-          name: imgName2,
+      if (imgData2) {
+        const img = await fileToBase64(imgData2);
+        const name = imgName2;
+        const fileData = {
+          name,
+          img,
+        };
+        await axios.post("http://localhost:5000/file/send", fileData, {
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
       }
-      if (postImg3) {
-        await axios.post("http://localhost:5000/file/send", {
-          img: postImg3,
-          name: imgName3,
+      if (imgData3) {
+        const img = await fileToBase64(imgData3);
+        const name = imgName3;
+        const fileData = {
+          name,
+          img,
+        };
+        await axios.post("http://localhost:5000/file/send", fileData, {
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
       }
-      if (postImg4) {
-        await axios.post("http://localhost:5000/file/send", {
-          img: postImg4,
-          name: imgName4,
+      if (imgData4) {
+        const img = await fileToBase64(imgData4);
+        const name = imgName4;
+        const fileData = {
+          name,
+          img,
+        };
+        await axios.post("http://localhost:5000/file/send", fileData, {
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
       }
     }
-    toggleInputMode(false);
+    props.toggleInputMode(false);
   };
 
   useEffect(() => {
-    if (triggerSendPost) {
-      triggerSendPost(sendPost);
+    if (props.triggerSendPost) {
+      props.triggerSendPost(() =>
+        sendPost({ imgData1, imgData2, imgData3, imgData4 })
+      );
     }
-  }, [
-    postMsg,
-    //putInFirestorageAndGetURL
-  ]);
+  }, [postMsg, imgData1, imgData2, imgData3, imgData4]);
 
   return (
     <div>
@@ -146,10 +175,10 @@ const CommunityInput: React.FC<ChildComponentProps> = ({
             </form>
           </label>
         </IconButton>
-        {postImg1 && <img src={imgUrl1} />}
-        {postImg2 && <img src={imgUrl2} />}
-        {postImg3 && <img src={imgUrl3} />}
-        {postImg4 && <img src={imgUrl4} />}
+        {imgData1 && <img src={imgUrl1} />}
+        {imgData2 && <img src={imgUrl2} />}
+        {imgData3 && <img src={imgUrl3} />}
+        {imgData4 && <img src={imgUrl4} />}
       </div>
     </div>
   );

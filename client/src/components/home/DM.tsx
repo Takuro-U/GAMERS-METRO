@@ -49,7 +49,7 @@ const DM: React.FC<PROPS> = (props) => {
 
   const user = useSelector(selectUser);
 
-  //新フォローリスト取得機能
+  //フォローリスト取得機能
   const getFolloweeList = async () => {
     const response = await axios.get("http://localhost:5000/follow/list", {
       params: {
@@ -65,7 +65,7 @@ const DM: React.FC<PROPS> = (props) => {
     setFollowees(followeeList);
   };
 
-  //新ユーザーデータ取得機能
+  //ユーザーデータ取得機能
   const getUser = async (uid: string) => {
     const response = await axios.get("http://localhost:5000/user/get", {
       params: {
@@ -80,7 +80,7 @@ const DM: React.FC<PROPS> = (props) => {
     });
   };
 
-  //新メッセージ取得機能
+  //メッセージ取得機能
   const getMessages = async (partnerUid: string) => {
     const response = await axios.get("http://localhost:5000/dm/get", {
       params: {
@@ -97,7 +97,7 @@ const DM: React.FC<PROPS> = (props) => {
     setMessages(messageData);
   };
 
-  //新メッセージ履歴取得機能
+  //メッセージ履歴取得機能
   const getLastMessages = async () => {
     const response = await axios.get("http://localhost:5000/dm/last", {
       params: {

@@ -57,7 +57,7 @@ const Auth: React.FC<PROPS> = (props) => {
     setRePassword("");
   };
 
-  //uid重複チェック
+  //uidチェック
   const checkId = async () => {
     try {
       if (profileId.length != 0) {
@@ -73,7 +73,6 @@ const Auth: React.FC<PROPS> = (props) => {
               },
             }
           );
-          console.log(response.data);
           if (response.data != null) {
             setMessageLabel1("そのIDは既に使用されています");
             return;
@@ -86,6 +85,7 @@ const Auth: React.FC<PROPS> = (props) => {
     }
   };
 
+  //パスワードチェック
   const checkPassword = () => {
     if (password.length != 0) {
       if (password.length < 8) {
@@ -96,6 +96,7 @@ const Auth: React.FC<PROPS> = (props) => {
     setMessageLabel2("Password");
   };
 
+  //パスワード再入力チェック
   const checkRePassword = () => {
     if (rePassword.length != 0) {
       if (password != rePassword) {

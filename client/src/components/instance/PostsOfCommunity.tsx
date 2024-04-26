@@ -3,7 +3,7 @@ import styles from "./PostsOfCommunity.module.css";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
 import Button from "@material-ui/core/Button/Button";
-import { Avatar, colors } from "@material-ui/core";
+import { Avatar } from "@material-ui/core";
 import {
   AccountCircle,
   ChatBubble,
@@ -12,10 +12,7 @@ import {
   Send,
 } from "@material-ui/icons";
 import Comments from "./Comments";
-import { text } from "stream/consumers";
-import UserProfile from "../profile/UserProfile";
 import axios from "axios";
-import { response } from "express";
 
 interface PROPS {
   postId: string;
@@ -53,7 +50,7 @@ type User = {
 
 const PostsOfCommunity: React.FC<PROPS> = (props) => {
   const [isEditMode, setIsEditMode] = useState(false);
-  const [currentText, setCurrentText] = useState("");
+  const [newText, setNewText] = useState("");
   const [isOpenComment, setIsOpenComment] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [comment, setComment] = useState<Comment[]>([]);
@@ -71,7 +68,7 @@ const PostsOfCommunity: React.FC<PROPS> = (props) => {
     props.setScreenMode(newValue);
   };
 
-  const handleChangeOpenningComment = (commentId: string) => {
+  const toggleOpenningComment = (commentId: string) => {
     if (idOfOpeningComment == commentId) {
       setIdOfOpeningComment("");
     } else {
@@ -80,11 +77,11 @@ const PostsOfCommunity: React.FC<PROPS> = (props) => {
   };
 
   //新投稿編集機能
-  const editPost = async (checkId: string, text: string) => {
-    if (currentText != text) {
+  const editPost = async () => {
+    if (newText != props.text) {
       await axios.put("http://localhost:5000/post/community/edit", {
-        id: checkId,
-        text: currentText,
+        id: props.postId,
+        text: newText,
       });
     }
     setIsEditMode(false);
@@ -92,10 +89,10 @@ const PostsOfCommunity: React.FC<PROPS> = (props) => {
   };
 
   //新投稿削除機能
-  const deletePost = async (checkId: string) => {
+  const deletePost = async () => {
     await axios.delete("http://localhost:5000/post/community/delete", {
       params: {
-        id: checkId,
+        id: props.postId,
       },
     });
     props.onReload();
@@ -193,13 +190,10 @@ const PostsOfCommunity: React.FC<PROPS> = (props) => {
             <>
               <form onSubmit={handleSubmit}>
                 <textarea
-                  value={currentText}
-                  onChange={(e) => setCurrentText(e.target.value)}
+                  value={newText}
+                  onChange={(e) => setNewText(e.target.value)}
                 />
-                <Button
-                  type="submit"
-                  onClick={() => editPost(props.postId, props.text)}
-                >
+                <Button type="submit" onClick={editPost}>
                   send
                 </Button>
               </form>
@@ -226,13 +220,13 @@ const PostsOfCommunity: React.FC<PROPS> = (props) => {
                       }
                     : () => {
                         setIsEditMode(true);
-                        setCurrentText(props.text);
+                        setNewText(props.text);
                       }
                 }
               >
                 <Edit />
               </Button>
-              <Button onClick={() => deletePost(props.postId)}>
+              <Button onClick={deletePost}>
                 <Delete />
               </Button>
             </>
@@ -267,7 +261,7 @@ const PostsOfCommunity: React.FC<PROPS> = (props) => {
                 profileId={users[content.Uid]?.ProfileId}
                 avatar={users[content.Uid]?.PhotoUrl}
                 isOpenComment={idOfOpeningComment == content.Id}
-                handleChangeOpening={handleChangeOpenningComment}
+                handleChangeOpening={toggleOpenningComment}
               />
             ))}
           </div>

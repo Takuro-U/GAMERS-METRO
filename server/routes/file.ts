@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
-import fileUpload, { UploadedFile } from "express-fileupload";
 import fs, { promises as fsPromises } from "fs";
 import path from "path";
-import sharp from "sharp";
+//import sharp from "sharp";
+import jimp from "jimp";
 
 const fileRouter = express.Router();
 
@@ -19,7 +19,9 @@ const saveFile = async (file: Buffer, path: string): Promise<void> => {
 };
 
 const convertToJPEG = async (buffer: Buffer): Promise<Buffer> => {
-  const result = sharp(buffer).toFormat("jpeg").toBuffer();
+  const image = await jimp.read(buffer);
+  const result = await image.quality(100).getBufferAsync(jimp.MIME_JPEG);
+  //const result = await sharp(buffer).toFormat("jpeg").toBuffer();
   return result;
 };
 
@@ -28,8 +30,8 @@ fileRouter.post("/send", async (req: Request, res: Response) => {
     try {
       const img = req.body?.img;
       const imgName = req.body.name;
-      const base64Data = img.split(",")[1];
-      const decodedImg = Buffer.from(base64Data, "base64");
+      const base64Data = await img.split(",")[1];
+      const decodedImg = await Buffer.from(base64Data, "base64");
       const jpegFile = await convertToJPEG(decodedImg);
       const imgPath = path.join(__dirname, "../upload_images/", imgName);
       await saveFile(jpegFile, imgPath);

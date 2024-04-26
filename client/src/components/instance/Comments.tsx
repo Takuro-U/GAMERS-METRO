@@ -43,9 +43,7 @@ const Comments: React.FC<PROPS> = (props) => {
   const [commentText, setCommentText] = useState("");
   const [comment, setComment] = useState<Comment[]>([]);
   const [users, setUsers] = useState<{ [id: string]: any }>({});
-
   const [idOfOpeningComment, setIdOfOpeningComment] = useState("");
-
   const [reload, setReload] = useState(false);
 
   const user = useSelector(selectUser);

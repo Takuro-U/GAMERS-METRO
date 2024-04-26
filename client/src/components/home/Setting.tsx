@@ -39,7 +39,13 @@ const Setting: React.FC<PROPS> = (props) => {
     });
   };
 
-  const checkPass = async () => {
+  const checkPass = async ({
+    newPass,
+    rePass,
+  }: {
+    newPass: string;
+    rePass: string;
+  }) => {
     if ((newPass.length != 0 && newPass.length < 8) || newPass.length > 16) {
       setMessageLabel2("パスワードは8文字以上16文字以下にしてください");
     } else {
@@ -52,17 +58,20 @@ const Setting: React.FC<PROPS> = (props) => {
     }
   };
 
-  const resetPass = async () => {
-    const currentPassword = currentPass;
-    const newPassword = newPass;
-    const rePassword = rePass;
-    if (newPassword == rePassword) {
+  const resetPass = async ({
+    newPass,
+    rePass,
+  }: {
+    newPass: string;
+    rePass: string;
+  }) => {
+    if (newPass == rePass) {
       const response = await axios.put(
         "http://localhost:5000/auth/reset-pass",
         {
           uid: user.uid,
-          currentPass: currentPassword,
-          newPass: newPassword,
+          currentPass: currentPass,
+          newPass: newPass,
         }
       );
       if (response.data == true) {
@@ -74,7 +83,7 @@ const Setting: React.FC<PROPS> = (props) => {
   };
 
   useEffect(() => {
-    checkPass();
+    checkPass({ newPass, rePass });
   }, [newPass, rePass]);
 
   return (
@@ -121,7 +130,7 @@ const Setting: React.FC<PROPS> = (props) => {
             </div>
           </div>
           <div className={styles.btn_area}>
-            <Button onClick={resetPass}>変更</Button>
+            <Button onClick={() => resetPass({ newPass, rePass })}>変更</Button>
             <Button onClick={() => setScreenMode("")}>戻る</Button>
           </div>
         </>
