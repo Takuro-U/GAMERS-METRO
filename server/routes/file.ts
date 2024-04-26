@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
 import fs, { promises as fsPromises } from "fs";
 import path from "path";
-//import sharp from "sharp";
-import jimp from "jimp";
+import sharp from "sharp";
+//import jimp from "jimp";
 
 const fileRouter = express.Router();
 
@@ -19,9 +19,9 @@ const saveFile = async (file: Buffer, path: string): Promise<void> => {
 };
 
 const convertToJPEG = async (buffer: Buffer): Promise<Buffer> => {
-  const image = await jimp.read(buffer);
-  const result = await image.quality(100).getBufferAsync(jimp.MIME_JPEG);
-  //const result = await sharp(buffer).toFormat("jpeg").toBuffer();
+  //const image = await jimp.read(buffer);
+  //const result = await image.quality(100).getBufferAsync(jimp.MIME_JPEG);
+  const result = await sharp(buffer).toFormat("jpeg").toBuffer();
   return result;
 };
 
