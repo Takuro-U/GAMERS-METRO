@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
+import { makeStyles } from "@material-ui/core/styles";
 import styles from "./Comments.module.css";
-import { AccountCircle, ChatBubble, Send } from "@material-ui/icons";
+import {
+  AccountCircle,
+  ChatBubble,
+  Delete,
+  Edit,
+  Send,
+} from "@material-ui/icons";
 import { Button } from "@material-ui/core";
 import axios from "axios";
 
@@ -20,6 +27,7 @@ type PROPS = {
   profileId: string;
   avatar: string;
   isOpenComment: boolean;
+  onReload: () => void;
   handleChangeOpening: (value: string) => void;
 };
 
@@ -39,14 +47,27 @@ type User = {
   PhotoUrl: string;
 };
 
+const useStyles = makeStyles({
+  userIcon: {
+    fontSize: "45px",
+  },
+});
+
 const Comments: React.FC<PROPS> = (props) => {
   const [commentText, setCommentText] = useState("");
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [newText, setNewText] = useState("");
   const [comment, setComment] = useState<Comment[]>([]);
   const [users, setUsers] = useState<{ [id: string]: any }>({});
   const [idOfOpeningComment, setIdOfOpeningComment] = useState("");
   const [reload, setReload] = useState(false);
 
   const user = useSelector(selectUser);
+  const classes = useStyles();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
 
   const handleChangeOpenningComment = (commentId: string) => {
     if (idOfOpeningComment == commentId) {
@@ -68,6 +89,8 @@ const Comments: React.FC<PROPS> = (props) => {
       uid: user.uid,
       text: commentText,
     });
+    setCommentText("");
+    setReload(!reload);
   };
 
   //新コメント取得機能
@@ -117,31 +140,98 @@ const Comments: React.FC<PROPS> = (props) => {
     }
   };
 
+  const editComment = async () => {
+    if (newText != props.text) {
+      await axios.put("http://localhost:5000/comment/edit", {
+        id: props.commentId,
+        text: newText,
+      });
+    }
+    setIsEditMode(false);
+    props.onReload();
+  };
+
+  const deleteComment = async () => {
+    await axios.delete("http://localhost:5000/comment/delete", {
+      params: {
+        id: props.commentId,
+      },
+    });
+    props.onReload();
+  };
+
   useEffect(() => {
     getComments();
   }, [reload]);
 
   return (
     <div className={styles.comments_parent}>
-      <div className={styles.comment_square}>
-        <div className={styles.icon_name}>
-          {props.avatar == "" ? (
-            <AccountCircle className={styles.icon} />
+      <div className={styles.scroll_area}>
+        <div className={styles.comment_square}>
+          <div className={styles.icon_name_id}>
+            {props.avatar == "" ? (
+              <AccountCircle className={classes.userIcon} />
+            ) : (
+              <></>
+            )}
+            <div className={styles.name_id}>
+              <p className={styles.name}>{props.username}</p>
+              <p className={styles.id}>＠{props.profileId}</p>
+            </div>
+          </div>
+          <div className={styles.timestamp}>
+            <p>{new Date(props.timestamp).toLocaleString()}</p>
+            {props.timestampEdit && (
+              <p>{new Date(props.timestampEdit).toLocaleString()}編集済</p>
+            )}
+          </div>
+          {isEditMode ? (
+            <form onSubmit={handleSubmit}>
+              <textarea
+                value={newText}
+                onChange={(e) => setNewText(e.target.value)}
+              />
+              <Button type="submit" onClick={editComment}>
+                send
+              </Button>
+            </form>
           ) : (
-            <></>
+            <p className={styles.text}>{props.text}</p>
           )}
-          <p>{props.username}</p>
+          <div className={styles.btn_area}>
+            <Button onClick={() => props.handleChangeOpening(props.commentId)}>
+              <ChatBubble />
+            </Button>
+            {props.uid == user.uid && (
+              <>
+                <Button
+                  onClick={
+                    isEditMode
+                      ? () => {
+                          setIsEditMode(false);
+                        }
+                      : () => {
+                          setIsEditMode(true);
+                          setNewText(props.text);
+                        }
+                  }
+                >
+                  <Edit />
+                </Button>
+                <Button onClick={deleteComment}>
+                  <Delete />
+                </Button>
+              </>
+            )}
+          </div>
         </div>
-        <p className={styles.text}>{props.text}</p>
-        <Button onClick={() => props.handleChangeOpening(props.commentId)}>
-          <ChatBubble />
-        </Button>
       </div>
       {props.isOpenComment && (
         <>
           <form className={styles.comment_form}>
             <input
               type="text"
+              value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
             />
             <Button onClick={sendComment}>
@@ -167,6 +257,7 @@ const Comments: React.FC<PROPS> = (props) => {
                     profileId={users[content.Uid]?.ProfileId}
                     avatar={users[content.Uid]?.PhotoUrl}
                     isOpenComment={idOfOpeningComment == content.Id}
+                    onReload={() => setReload(!reload)}
                     handleChangeOpening={handleChangeOpenningComment}
                   />
                 ))}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./PostsOfCommunity.module.css";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
+import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button/Button";
 import { Avatar } from "@material-ui/core";
 import {
@@ -48,6 +49,12 @@ type User = {
   PhotoUrl: string;
 };
 
+const useStyles = makeStyles({
+  userIcon: {
+    fontSize: "45px",
+  },
+});
+
 const PostsOfCommunity: React.FC<PROPS> = (props) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [newText, setNewText] = useState("");
@@ -59,6 +66,7 @@ const PostsOfCommunity: React.FC<PROPS> = (props) => {
   const [reload, setReload] = useState(false);
 
   const user = useSelector(selectUser);
+  const classes = useStyles();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -105,6 +113,8 @@ const PostsOfCommunity: React.FC<PROPS> = (props) => {
       uid: user.uid,
       text: commentText,
     });
+    setCommentText("");
+    setReload(!reload);
   };
 
   //新コメント取得機能
@@ -171,37 +181,38 @@ const PostsOfCommunity: React.FC<PROPS> = (props) => {
             }}
           >
             {props.avatar == "" ? (
-              <AccountCircle className={styles.icon} />
+              <AccountCircle className={classes.userIcon} />
             ) : (
               <></>
             )}
           </span>
           <div className={styles.name_id}>
-            <p className={styles.username}>{props.username}</p>
-            <p className={styles.id}>&nbsp;＠{props.profileId}</p>
+            <p className={styles.name}>{props.username}</p>
+            <p className={styles.id}>＠{props.profileId}</p>
           </div>
         </div>
-        <div className={styles.timestamp_text}>
-          <span>{new Date(props.timestamp).toLocaleString()}</span>
+        <div className={styles.timestamp}>
+          <p>{new Date(props.timestamp).toLocaleString()}</p>
           {props.timestampEdit && (
             <p>{new Date(props.timestampEdit).toLocaleString()}編集済</p>
           )}
-          {isEditMode ? (
-            <>
-              <form onSubmit={handleSubmit}>
-                <textarea
-                  value={newText}
-                  onChange={(e) => setNewText(e.target.value)}
-                />
-                <Button type="submit" onClick={editPost}>
-                  send
-                </Button>
-              </form>
-            </>
-          ) : (
-            <p>{props.text}</p>
-          )}
         </div>
+        {isEditMode ? (
+          <>
+            <form onSubmit={handleSubmit}>
+              <textarea
+                value={newText}
+                onChange={(e) => setNewText(e.target.value)}
+              />
+              <Button type="submit" onClick={editPost}>
+                send
+              </Button>
+            </form>
+          </>
+        ) : (
+          <p className={styles.text}>{props.text}</p>
+        )}
+
         {props.image1 && <img src={props.image1} />}
         {props.image2 && <img src={props.image2} />}
         {props.image3 && <img src={props.image3} />}
@@ -238,6 +249,7 @@ const PostsOfCommunity: React.FC<PROPS> = (props) => {
           <div className={styles.comment_input}>
             <input
               type="text"
+              value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
             />
             <Button onClick={sendComment}>
@@ -261,6 +273,7 @@ const PostsOfCommunity: React.FC<PROPS> = (props) => {
                 profileId={users[content.Uid]?.ProfileId}
                 avatar={users[content.Uid]?.PhotoUrl}
                 isOpenComment={idOfOpeningComment == content.Id}
+                onReload={() => setReload(!reload)}
                 handleChangeOpening={toggleOpenningComment}
               />
             ))}

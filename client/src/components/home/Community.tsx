@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Community.module.css";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../features/userSlice";
 import PostsOfCommunity from "../instance/PostsOfCommunity";
 import axios from "axios";
-import { get } from "http";
-import { response } from "express";
 
 type PROPS = {
   setScreenMode: (value: string) => void;

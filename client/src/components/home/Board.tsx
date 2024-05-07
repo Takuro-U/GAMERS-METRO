@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Board.module.css";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../features/userSlice";
 import PostsOfBoard from "../instance/PostsOfBoard";
 import axios from "axios";
-import { Button, colors } from "@material-ui/core";
 
 type PROPS = {
   setScreenMode: (value: string) => void;

@@ -1,11 +1,8 @@
 import express from "express";
 import cors from "cors";
 import sequelize from "../models";
-import fileUpload from "express-fileupload";
 
 const app = express();
-
-const bodyParser = require("body-parser");
 
 const dmRouter = require("../routes/dm");
 const authRouter = require("../routes/auth");
@@ -17,16 +14,13 @@ const commentRouter = require("../routes/comment");
 
 const PORT = process.env.PORT || 5000;
 
+const corsOptions = {
+  origin: ["http://gamers-metro.com", "http://localhost:3000"],
+};
+
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
-//app.use(bodyParser.json({ limit: "500mb" }));
-//app.use(bodyParser.urlencoded({ limit: "500mb", extended: true }));
-//app.use(
-//fileUpload({
-//limits: { fileSize: 50 * 1024 * 1024 },
-//})
-//);
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use("/dm", dmRouter);
 app.use("/auth", authRouter);

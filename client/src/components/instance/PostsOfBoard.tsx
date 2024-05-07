@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./PostsOfBoard.module.css";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
+import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core";
 import { AccountCircle, Delete, Edit } from "@material-ui/icons";
 import { Button } from "@material-ui/core";
@@ -24,6 +25,12 @@ interface PROPS {
   setUidOfProfileMode: (value: string) => void;
 }
 
+const useStyles = makeStyles({
+  userIcon: {
+    fontSize: "45px",
+  },
+});
+
 const PostsOfBoard: React.FC<PROPS> = (props) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [newGameTitle, setNewGameTitle] = useState("");
@@ -31,6 +38,7 @@ const PostsOfBoard: React.FC<PROPS> = (props) => {
   const [newText, setNewText] = useState("");
 
   const user = useSelector(selectUser);
+  const classes = useStyles();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -81,48 +89,49 @@ const PostsOfBoard: React.FC<PROPS> = (props) => {
           }}
         >
           {props.avatar == "" ? (
-            <AccountCircle className={styles.icon} />
+            <AccountCircle className={classes.userIcon} />
           ) : (
             <></>
           )}
         </span>
         <div className={styles.name_id}>
-          <p className={styles.username}>{props.username}</p>
-          <p className={styles.id}>&nbsp;＠{props.profileId}</p>
+          <p className={styles.name}>{props.username}</p>
+          <p className={styles.id}>＠{props.profileId}</p>
         </div>
       </div>
-      <div className={styles.timestamp_text}>
-        <span>{new Date(props.timestamp).toLocaleString()}</span>
+      <div className={styles.timestamp}>
+        <p>{new Date(props.timestamp).toLocaleString()}</p>
         {props.timestampEdit && (
           <p>{new Date(props.timestampEdit).toLocaleString()}編集済</p>
         )}
-        {isEditMode ? (
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              value={newGameTitle}
-              onChange={(e) => setNewGameTitle(e.target.value)}
-            />
-            <input
-              type="text"
-              value={newPostTitle}
-              onChange={(e) => setNewPostTitle(e.target.value)}
-            />
-            <textarea
-              value={newText}
-              onChange={(e) => setNewText(e.target.value)}
-            />
-            <Button onClick={editPost}>SEND</Button>
-          </form>
-        ) : (
-          <>
-            <p>ゲーム名：{props.gametitle}</p>
-            <p>募集内容：{props.posttitle}</p>
-            <p>募集人数：{props.numOfMember}</p>
-            <p>{props.text}</p>
-          </>
-        )}
       </div>
+      {isEditMode ? (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            value={newGameTitle}
+            onChange={(e) => setNewGameTitle(e.target.value)}
+          />
+          <input
+            type="text"
+            value={newPostTitle}
+            onChange={(e) => setNewPostTitle(e.target.value)}
+          />
+          <textarea
+            value={newText}
+            onChange={(e) => setNewText(e.target.value)}
+          />
+          <Button onClick={editPost}>SEND</Button>
+        </form>
+      ) : (
+        <div className={styles.texts}>
+          <p>ゲーム名：{props.gametitle}</p>
+          <p>募集内容：{props.posttitle}</p>
+          <p>募集人数：{props.numOfMember}</p>
+          <p>{props.text}</p>
+        </div>
+      )}
+
       {props.uid == user.uid && (
         <div className={styles.btn_area}>
           <Button

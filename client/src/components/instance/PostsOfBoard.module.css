@@ -56,35 +56,45 @@
   mask-composite: exclude;
 }
 
-.icon {
-  height: 50%;
-  width: auto;
-  margin: auto 0;
-  margin-left: 10px;
-  margin-right: 5px;
-}
-
-.username {
-  font-size: 22px;
-}
-
-.userid {
-  font-size: 15px;
-}
-
-.name_id {
-  display: flex;
-  align-items: last baseline;
-}
-
 .icon_name_id {
   display: flex;
   align-items: center;
-  height: 70px;
+  padding-top: 10px;
+  padding-left: 7px;
 }
 
-.timestamp_text {
-  margin-left: 10px;
+.name_id p {
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 3px;
+  line-height: 1.2;
+}
+
+.name {
+  font-size: 120%;
+}
+
+.id {
+  font-size: 80%;
+}
+
+.timestamp {
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 10px;
+  font-size: 13px;
+  line-height: 0.4;
+}
+
+.texts {
+  padding-left: 10px;
+  padding-right: 7px;
+}
+
+.btn_area {
+  display: flex;
 }
 
 .btn_area Button {

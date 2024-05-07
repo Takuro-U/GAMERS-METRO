@@ -2,6 +2,8 @@
   position: relative;
   overflow-x: visible;
   margin-right: 15px;
+  margin-top: 10px;
+  width: 200px;
 }
 
 .comments_child {
@@ -13,33 +15,17 @@
   max-width: 100vw;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  z-index: 1;
 }
 
 .comments_child::-webkit-scrollbar {
   display: none;
 }
 
-.icon {
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
-.icon_name {
-  display: flex;
-  align-items: center;
-}
-
-.text {
-  margin-left: 5px;
-}
-
 .comment_square {
   position: relative;
   color: white;
-}
-
-.comment_square Button {
-  color: white;
+  padding-bottom: 5px;
 }
 
 .comment_square::after {
@@ -69,6 +55,7 @@
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: -1;
   border-radius: 10px;
   border: 1px solid transparent;
   background: linear-gradient(
@@ -88,8 +75,54 @@
   mask-composite: exclude;
 }
 
+.icon_name_id {
+  display: flex;
+  align-items: center;
+  padding-top: 10px;
+  padding-left: 7px;
+}
+
+.name_id p {
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 3px;
+  line-height: 1.2;
+}
+
+.name {
+  font-size: 120%;
+}
+
+.id {
+  font-size: 80%;
+}
+
+.timestamp {
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 10px;
+  font-size: 13px;
+  line-height: 0.4;
+}
+
+.text {
+  padding-left: 10px;
+  padding-right: 7px;
+}
+
+.btn_area {
+  display: flex;
+}
+
+.btn_area Button {
+  color: white;
+}
+
 .comment_form {
   display: flex;
+  margin-top: 10px;
 }
 
 .comment_form Button {

@@ -39,4 +39,35 @@ commentRouter.post("/send", async (req: Request, res: Response) => {
   }
 });
 
+commentRouter.put("/edit", async (req: Request, res: Response) => {
+  try {
+    const id = req.body.id;
+    const text = req.body.text;
+    const timestamp = new Date();
+    const result = await Comment.findByPk(id);
+
+    if (result) {
+      result.Text = text;
+      result.TimestampEdit = timestamp;
+    }
+    await result?.save();
+
+    res.json(null);
+  } catch (error) {}
+});
+
+commentRouter.delete("/delete", async (req: Request, res: Response) => {
+  try {
+    const id = req.query.id as string;
+    await Comment.destroy({
+      where: {
+        Id: id,
+      },
+    });
+    res.json(null);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 module.exports = commentRouter;
