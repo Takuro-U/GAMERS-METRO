@@ -15,7 +15,7 @@ const commentRouter = require("../routes/comment");
 const PORT = process.env.PORT || 5000;
 
 const corsOptions = {
-  origin: ["http://gamers-metro.com", "http://localhost:3000"],
+  origin: ["https://gamers-metro.com", "http://localhost:3000"],
 };
 
 app.use(express.json({ limit: "50mb" }));
