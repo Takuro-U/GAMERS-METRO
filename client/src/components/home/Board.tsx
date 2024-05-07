@@ -32,11 +32,11 @@ const Board: React.FC<PROPS> = (props) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [users, setUsers] = useState<{ [Uid: string]: User }>({});
 
+  const domain = process.env.REACT_APP_API_DOMAIN;
+
   //新投稿取得機能
   const getPosts = async () => {
-    const postResponse = await axios.get(
-      "http://localhost:5000/post/board/get"
-    );
+    const postResponse = await axios.get(domain + "/post/board/get");
     if (postResponse.data.length != 0) {
       const postData = postResponse.data.map((post: Post) => ({
         Id: post.Id,
@@ -54,7 +54,7 @@ const Board: React.FC<PROPS> = (props) => {
         new Set(postData.map((post: Post) => post.Uid))
       );
 
-      const userResponse = await axios.get("http://localhost:5000/user/list", {
+      const userResponse = await axios.get(domain + "/user/list", {
         params: {
           idList: uniqueUids,
         },
@@ -78,14 +78,11 @@ const Board: React.FC<PROPS> = (props) => {
 
   //投稿検索機能
   const searchPosts = async (keyWords: string[]) => {
-    const postResponse = await axios.get(
-      "http://localhost:5000/post/board/search",
-      {
-        params: {
-          keyWords: keyWords,
-        },
-      }
-    );
+    const postResponse = await axios.get(domain + "/post/board/search", {
+      params: {
+        keyWords: keyWords,
+      },
+    });
     if (postResponse.data.length != 0) {
       const postData = postResponse.data.map((post: Post) => ({
         Id: post.Id,
@@ -103,7 +100,7 @@ const Board: React.FC<PROPS> = (props) => {
         new Set(postData.map((post: Post) => post.Uid))
       );
 
-      const userResponse = await axios.get("http://localhost:5000/user/list", {
+      const userResponse = await axios.get(domain + "/user/list", {
         params: {
           idList: uniqueUids,
         },

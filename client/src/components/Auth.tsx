@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Auth.module.css";
 import { useDispatch } from "react-redux";
-import { updateUserProfile } from "../features/userSlice";
 import {
   Avatar,
   Button,
@@ -16,11 +15,7 @@ import {
   Box,
   setRef,
 } from "@material-ui/core";
-import { classicNameResolver } from "typescript";
-import { sign } from "crypto";
 import axios from "axios";
-import { DeleteRounded } from "@material-ui/icons";
-import { response } from "express";
 
 type PROPS = {
   handleChangeAuthUser: (value: {
@@ -50,6 +45,8 @@ const Auth: React.FC<PROPS> = (props) => {
   const [isLogimMode, setIsLoginMode] = useState(true);
   const [waitingResponse, setWaitingResponse] = useState("");
 
+  const domain = process.env.REACT_APP_API_DOMAIN;
+
   const cleanUp = async () => {
     setProfileId("");
     setEmail("");
@@ -65,14 +62,11 @@ const Auth: React.FC<PROPS> = (props) => {
           setMessageLabel1("IDは8文字以上16文字以下にしてください");
           return;
         } else {
-          const response = await axios.get(
-            "http://localhost:5000/auth/idlist/",
-            {
-              params: {
-                id: profileId,
-              },
-            }
-          );
+          const response = await axios.get(domain + "/auth/idlist/", {
+            params: {
+              id: profileId,
+            },
+          });
           if (response.data != null) {
             setMessageLabel1("そのIDは既に使用されています");
             return;
@@ -109,7 +103,7 @@ const Auth: React.FC<PROPS> = (props) => {
 
   //アカウント存在チェック
   const searchedAccount = async () => {
-    const response = await axios.get("http://localhost:5000/auth/search", {
+    const response = await axios.get(domain + "/auth/search", {
       params: {
         emailOrProfileId: email,
       },
@@ -121,15 +115,12 @@ const Auth: React.FC<PROPS> = (props) => {
   //Emailログイン機能
   const logInWithEmail = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:5000/auth/login/email",
-        {
-          params: {
-            email: address,
-            password: password,
-          },
-        }
-      );
+      const response = await axios.get(domain + "/auth/login/email", {
+        params: {
+          email: address,
+          password: password,
+        },
+      });
       props.handleChangeAuthUser({
         uid: response.data.Uid,
         userName: response.data.UserName,
@@ -139,7 +130,7 @@ const Auth: React.FC<PROPS> = (props) => {
         follower: response.data.Follower,
         followee: response.data.Followee,
       });
-      await axios.delete("http://localhost:5000/auth/otp-reset", {
+      await axios.delete(domain + "/auth/otp-reset", {
         params: {
           email: address,
         },
@@ -158,7 +149,7 @@ const Auth: React.FC<PROPS> = (props) => {
         addressToSend = await searchedAccount();
         console.log(addressToSend);
       }
-      await axios.post("http://localhost:5000/auth/email", {
+      await axios.post(domain + "/auth/email", {
         address: addressToSend,
       });
       setAddress(addressToSend);
@@ -173,14 +164,14 @@ const Auth: React.FC<PROPS> = (props) => {
   //サインアップ機能
   const handleSignUp = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/auth/otpcheck", {
+      const response = await axios.get(domain + "/auth/otpcheck", {
         params: {
           email: email,
           otp: oneTimePass,
         },
       });
       if (response.data == true) {
-        await axios.post("http://localhost:5000/auth/signup", {
+        await axios.post(domain + "/auth/signup", {
           profileId: profileId,
           email: email,
           password: password,
