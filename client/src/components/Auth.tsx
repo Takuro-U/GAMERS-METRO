@@ -188,6 +188,7 @@ const Auth: React.FC<PROPS> = (props) => {
 
   useEffect(() => {
     checkId();
+    console.log(domain);
   }, [profileId]);
 
   useEffect(() => {
