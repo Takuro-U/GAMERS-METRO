@@ -1,7 +1,10 @@
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
+import path from "path";
 
-dotenv.config();
+const envPath = path.resolve(__dirname, "..", ".env");
+
+dotenv.config({ path: envPath });
 
 const sequelize = new Sequelize(
   process.env.DB_NAME || "default_db_name",
