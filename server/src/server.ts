@@ -1,6 +1,6 @@
-import express from "express";
-import cors from "cors";
-import sequelize from "../models";
+const express = require("express");
+const cors = require("cors");
+const sequelize = require("../models");
 
 const app = express();
 

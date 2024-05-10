@@ -166,7 +166,6 @@ const Comments: React.FC<PROPS> = (props) => {
 
   return (
     <div className={styles.comments_parent}>
-      <div className={styles.scroll_area}>
         <div className={styles.comment_square}>
           <div className={styles.icon_name_id}>
             {props.avatar == "" ? (
@@ -225,7 +224,6 @@ const Comments: React.FC<PROPS> = (props) => {
             )}
           </div>
         </div>
-      </div>
       {props.isOpenComment && (
         <>
           <form className={styles.comment_form}>
