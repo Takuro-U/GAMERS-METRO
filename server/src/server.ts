@@ -1,6 +1,6 @@
-const express = require("express");
-const cors = require("cors");
-const sequelize = require("../models");
+import express from "express";
+import cors from "cors";
+import sequelize from "../models";
 
 const app = express();
 
@@ -39,6 +39,6 @@ sequelize
   .then(() => {
     console.log("Connection has been established successfully.");
   })
-  .catch(() => {
-    console.error("Unable to connect to the database:");
+  .catch((err: any) => {
+    console.error("Unable to connect to the database:", err);
   });
