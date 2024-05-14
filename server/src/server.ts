@@ -16,6 +16,7 @@ const PORT = process.env.PORT || 5000;
 
 const corsOptions = {
   origin: ["https://gamers-metro.com", "http://localhost:3000"],
+  optionsSuccessStatus: 200,
 };
 
 app.use(express.json({ limit: "50mb" }));
