@@ -16,7 +16,8 @@ const followRouter = require("../routes/follow");
 const commentRouter = require("../routes/comment");
 const PORT = process.env.PORT || 5000;
 const corsOptions = {
-    origin: ["https://gamers-metro.com", "http://localhost:3000"],
+    origin: ["https://gamers-metro.com:5000", "http://localhost:3000"],
+    optionsSuccessStatus: 200,
 };
 app.use(express_1.default.json({ limit: "50mb" }));
 app.use(express_1.default.urlencoded({ limit: "50mb", extended: true }));
