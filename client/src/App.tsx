@@ -5,6 +5,8 @@ import { selectUser, login, logout } from "./features/userSlice";
 import Auth from "./components/Auth";
 import Main from "./components/Main";
 
+import axios from "axios";
+
 type UserData = {
   uid: string;
   userName: string;
@@ -16,6 +18,13 @@ type UserData = {
 };
 
 const App: React.FC = () => {
+  const domain = process.env.REACT_APP_API_DOMAIN;
+
+  const resultOfTest = async () => {
+    const response = await axios.get(domain + "/api/test");
+    return response;
+  };
+
   const storedAuthUserData = localStorage.getItem("authUser");
   const initialAuthUser: UserData = storedAuthUserData
     ? JSON.parse(storedAuthUserData)
@@ -52,6 +61,13 @@ const App: React.FC = () => {
       dispatch(logout());
     }
   }, [authUser]);
+
+  useEffect(() => {
+    const test = async () => {
+      console.log(await resultOfTest());
+    };
+    test();
+  }, []);
 
   return (
     <div className={styles.App}>

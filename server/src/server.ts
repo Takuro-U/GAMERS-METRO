@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import sequelize from "../models";
 
@@ -15,7 +15,7 @@ const commentRouter = require("../routes/comment");
 const PORT = process.env.PORT || 5000;
 
 const corsOptions = {
-  origin: "https://gamers-metro.com",
+  origin: ["https://gamers-metro.com", "http://localhost:3000"],
   optionsSuccessStatus: 200,
 };
 
@@ -30,6 +30,10 @@ app.use("/post", postRouter);
 app.use("/user", userRouter);
 app.use("/follow", followRouter);
 app.use("/comment", commentRouter);
+
+app.get("/api/test", async (req: Request, res: Response) => {
+  res.json("executed");
+});
 
 app.listen(PORT, () => {
   console.log("サーバーがポート" + PORT + "で実行中です");
