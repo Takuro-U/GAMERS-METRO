@@ -18,7 +18,7 @@ type UserData = {
 };
 
 const App: React.FC = () => {
-  const domain = "https://gamers-metro.com:5000";
+  const domain = "https://gamers-metro.com:443";
   //process.env.REACT_APP_API_DOMAIN;
 
   const resultOfTest = async () => {
