@@ -23,7 +23,7 @@ const App: React.FC = () => {
 
   const resultOfTest = async () => {
     console.log(domain);
-    const response = await axios.get(domain + "/api/test");
+    const response = await axios.get("/api/test");
     return response;
   };
 
