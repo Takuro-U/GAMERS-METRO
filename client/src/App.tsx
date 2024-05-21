@@ -18,12 +18,12 @@ type UserData = {
 };
 
 const App: React.FC = () => {
-  const domain = "https://gamers-metro.com:443";
+  const domain = "https://gamers-metro.com:8022";
   //process.env.REACT_APP_API_DOMAIN;
 
   const resultOfTest = async () => {
     console.log(domain);
-    const response = await axios.get("/api/test");
+    const response = await axios.get(domain + "/api/test");
     return response;
   };
 

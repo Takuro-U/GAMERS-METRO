@@ -1,18 +1,18 @@
 {
   "files": {
     "main.css": "/static/css/main.379a30d7.css",
-    "main.js": "/static/js/main.fe376710.js",
+    "main.js": "/static/js/main.6aeb7cf4.js",
     "static/js/787.4ae46923.chunk.js": "/static/js/787.4ae46923.chunk.js",
     "static/media/earth_by_moon.jpg": "/static/media/earth_by_moon.ef4acedc7812cd5dbc3f.jpg",
     "static/media/PixelMplus12-Regular.ttf": "/static/media/PixelMplus12-Regular.35b3b952cc971da434eb.ttf",
     "static/media/PixelMplus12-Bold.ttf": "/static/media/PixelMplus12-Bold.df373da6b9b7ae48b416.ttf",
     "index.html": "/index.html",
     "main.379a30d7.css.map": "/static/css/main.379a30d7.css.map",
-    "main.fe376710.js.map": "/static/js/main.fe376710.js.map",
+    "main.6aeb7cf4.js.map": "/static/js/main.6aeb7cf4.js.map",
     "787.4ae46923.chunk.js.map": "/static/js/787.4ae46923.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.379a30d7.css",
-    "static/js/main.fe376710.js"
+    "static/js/main.6aeb7cf4.js"
   ]
 }
