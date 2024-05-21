@@ -12,7 +12,7 @@ const userRouter = require("../routes/user");
 const followRouter = require("../routes/follow");
 const commentRouter = require("../routes/comment");
 
-const PORT = process.env.PORT || 443;
+const PORT = process.env.PORT || 80;
 
 const corsOptions = {
   origin: ["https://gamers-metro.com", "http://localhost:3000"],
